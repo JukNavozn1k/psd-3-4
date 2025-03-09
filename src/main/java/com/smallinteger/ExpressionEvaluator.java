@@ -1,4 +1,4 @@
-package src.main.java.com.smallinteger;
+package main.java.com.smallinteger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
