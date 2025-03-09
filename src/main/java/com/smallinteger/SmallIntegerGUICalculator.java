@@ -17,21 +17,33 @@ public class SmallIntegerGUICalculator extends JFrame {
     private void initializeUI() {
         setTitle("SmallInteger Calculator");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(5, 5));
+        setLayout(new GridBagLayout());
+        setMinimumSize(new Dimension(300, 400));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 5, 5, 5);
 
         // Создаем текстовое поле для отображения
         display = new JTextField();
         display.setFont(new Font("Arial", Font.PLAIN, 20));
         display.setHorizontalAlignment(JTextField.RIGHT);
         display.setEditable(false);
-        add(display, BorderLayout.NORTH);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.15;
+        add(display, gbc);
 
         // Создаем панель с кнопками
         JPanel buttonPanel = new JPanel(new GridLayout(5, 4, 5, 5));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         // Определяем кнопки
         String[] buttonLabels = {
-            "(", ")", "C", "CLS",
+            "(", ")", "C", "<-",
             "7", "8", "9", "/",
             "4", "5", "6", "*",
             "1", "2", "3", "-",
@@ -47,15 +59,13 @@ public class SmallIntegerGUICalculator extends JFrame {
             button.addActionListener(e -> handleButton(label));
         }
 
-        add(buttonPanel, BorderLayout.CENTER);
+        gbc.gridy = 1;
+        gbc.weighty = 0.85;
+        add(buttonPanel, gbc);
 
-        // Добавляем отступы
-        ((JPanel)getContentPane()).setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // Устанавливаем размер и делаем окно видимым
-        setSize(300, 400);
+        // Начальный размер окна
+        setSize(400, 500);
         setLocationRelativeTo(null);
-        setResizable(false);
     }
 
     private void handleButton(String label) {
@@ -63,7 +73,7 @@ public class SmallIntegerGUICalculator extends JFrame {
             case "C":
                 display.setText("");
                 break;
-            case "CLS":
+            case "<-":
                 String text = display.getText();
                 if (!text.isEmpty()) {
                     display.setText(text.substring(0, text.length() - 1));
