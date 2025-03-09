@@ -25,12 +25,12 @@ public class SmallIntegerGUICalculator extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Создаем редактируемое текстовое поле для отображения
+      
         display = new JTextField();
         display.setFont(new Font("Arial", Font.PLAIN, 20));
         display.setHorizontalAlignment(JTextField.RIGHT);
         display.setEditable(true);
-        // Добавляем KeyListener для обработки клавиши Enter
+        // Enter handling
         display.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -47,11 +47,10 @@ public class SmallIntegerGUICalculator extends JFrame {
         gbc.weighty = 0.15;
         add(display, gbc);
 
-        // Создаем панель с кнопками
+        // btn layout
         JPanel buttonPanel = new JPanel(new GridLayout(5, 4, 5, 5));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        // Определяем кнопки
         String[] buttonLabels = {
             "(", ")", "C", "<-",
             "7", "8", "9", "/",
@@ -60,7 +59,6 @@ public class SmallIntegerGUICalculator extends JFrame {
             "0", "%", "=", "+"
         };
 
-        // Добавляем кнопки на панель
         for (String label : buttonLabels) {
             JButton button = new JButton(label);
             button.setFont(new Font("Arial", Font.PLAIN, 18));
@@ -72,12 +70,10 @@ public class SmallIntegerGUICalculator extends JFrame {
         gbc.weighty = 0.85;
         add(buttonPanel, gbc);
 
-        // Начальный размер окна
         setSize(400, 500);
         setLocationRelativeTo(null);
     }
 
-    // Обработка нажатий кнопок с валидацией ввода
     private void handleButton(String label) {
         if (startNewInput && !label.equals("=")) {
             display.setText("");
@@ -99,11 +95,9 @@ public class SmallIntegerGUICalculator extends JFrame {
                 calculateResult();
                 break;
             default:
-                // Если вводим оператор, проверяем последний символ
                 if (isOperator(label)) {
                     if (!currentText.isEmpty() && isOperator(
                             String.valueOf(currentText.charAt(currentText.length() - 1)))) {
-                        // Заменяем предыдущий оператор на новый
                         currentText = currentText.substring(0, currentText.length() - 1);
                         display.setText(currentText + label);
                         return;
@@ -113,7 +107,6 @@ public class SmallIntegerGUICalculator extends JFrame {
         }
     }
 
-    // Проверка, является ли строка оператором
     private boolean isOperator(String s) {
         return s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/") || s.equals("%");
     }
@@ -133,7 +126,6 @@ public class SmallIntegerGUICalculator extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                // Устанавливаем системный Look and Feel
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception e) {
                 e.printStackTrace();
