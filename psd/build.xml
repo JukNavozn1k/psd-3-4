@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SmallIntegerCalculator" default="compile" basedir=".">
+    <description>
+        Build file for SmallInteger Calculator project
+    </description>
+
+    <!-- Global properties -->
+    <property name="src.dir" location="src/main/java"/>
+    <property name="build.dir" location="build"/>
+    <property name="dist.dir" location="dist"/>
+    <property name="main.class" value="main.java.com.smallinteger.SmallIntegerCalculator"/>
+
+    <!-- Clean target -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+
+    <!-- Init target -->
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <!-- Compile target -->
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+            <compilerarg value="-Xlint:unchecked"/>
+        </javac>
+    </target>
+
+    <!-- Create JAR -->
+    <target name="jar" depends="compile">
+        <jar destfile="${dist.dir}/SmallIntegerCalculator.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Run application -->
+    <target name="run" depends="jar">
+        <java jar="${dist.dir}/SmallIntegerCalculator.jar" fork="true"/>
+    </target>
+</project>
