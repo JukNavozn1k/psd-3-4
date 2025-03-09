@@ -1,4 +1,4 @@
-package src.main.java.com.smallinteger;
+package main.java.com.smallinteger;
 
 import javax.swing.*;
 import java.awt.*;
