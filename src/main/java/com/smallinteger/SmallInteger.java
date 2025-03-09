@@ -1,4 +1,4 @@
-package main.java.com.smallinteger;
+package src.main.java.com.smallinteger;
 
 /**
  * Класс SmallInteger представляет собой ограниченный целочисленный тип данных,
