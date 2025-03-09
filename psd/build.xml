@@ -9,17 +9,21 @@
     <property name="build.dir" location="build"/>
     <property name="dist.dir" location="dist"/>
     <property name="main.class" value="main.java.com.smallinteger.SmallIntegerCalculator"/>
+    <property name="doc.dir" location="doc"/>
+    <property name="doc.title" value="SmallInteger Calculator Documentation"/>
 
     <!-- Clean target -->
     <target name="clean">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>
+        <delete dir="${doc.dir}"/>
     </target>
 
     <!-- Init target -->
     <target name="init">
         <mkdir dir="${build.dir}"/>
         <mkdir dir="${dist.dir}"/>
+        <mkdir dir="${doc.dir}"/>
     </target>
 
     <!-- Compile target -->
@@ -45,4 +49,29 @@
     <target name="run" depends="jar">
         <java jar="${dist.dir}/SmallIntegerCalculator.jar" fork="true"/>
     </target>
+
+    <!-- Generate JavaDoc -->
+    <target name="javadoc" depends="init">
+        <javadoc sourcepath="${src.dir}"
+                 destdir="${doc.dir}"
+                 doctitle="${doc.title}"
+                 windowtitle="${doc.title}"
+                 encoding="UTF-8"
+                 charset="UTF-8"
+                 author="true"
+                 version="true"
+                 use="true">
+            <fileset dir="${src.dir}">
+                <include name="**/*.java"/>
+            </fileset>
+            <classpath>
+                <pathelement location="${build.dir}"/>
+            </classpath>
+            <link href="https://docs.oracle.com/en/java/javase/11/docs/api/"/>
+        </javadoc>
+    </target>
+
+    <!-- Optional: Create a target that builds everything including documentation -->
+    <target name="all" depends="clean,compile,jar,javadoc"
+            description="Clean and build everything including JavaDoc"/>
 </project>
