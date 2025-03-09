@@ -11,6 +11,7 @@
     <property name="main.class" value="main.java.com.smallinteger.SmallIntegerCalculator"/>
     <property name="doc.dir" location="doc"/>
     <property name="doc.title" value="SmallInteger Calculator Documentation"/>
+    <property name="main.gui.class" value="main.java.com.smallinteger.SmallIntegerGUICalculator"/>
 
     <!-- Clean target -->
     <target name="clean">
@@ -45,9 +46,13 @@
         </jar>
     </target>
 
-    <!-- Run application -->
-    <target name="run" depends="jar">
-        <java jar="${dist.dir}/SmallIntegerCalculator.jar" fork="true"/>
+    <!-- Create JAR for GUI Calculator -->
+    <target name="jarSwing" depends="compile">
+        <jar destfile="${dist.dir}/SmallIntegerGUICalculator.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.gui.class}"/>
+            </manifest>
+        </jar>
     </target>
 
     <!-- Generate JavaDoc -->
@@ -72,6 +77,6 @@
     </target>
 
     <!-- Optional: Create a target that builds everything including documentation -->
-    <target name="all" depends="clean,compile,jar,javadoc"
+    <target name="all" depends="clean,compile,jar,jarSwing,javadoc"
             description="Clean and build everything including JavaDoc"/>
 </project>
