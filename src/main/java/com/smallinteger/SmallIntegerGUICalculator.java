@@ -2,7 +2,8 @@ package main.java.com.smallinteger;
 
 import javax.swing.*;
 import java.awt.*;
-
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class SmallIntegerGUICalculator extends JFrame {
     private JTextField display;
@@ -24,12 +25,21 @@ public class SmallIntegerGUICalculator extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Создаем текстовое поле для отображения
+        // Создаем редактируемое текстовое поле для отображения
         display = new JTextField();
         display.setFont(new Font("Arial", Font.PLAIN, 20));
         display.setHorizontalAlignment(JTextField.RIGHT);
-        display.setEditable(false);
-        
+        display.setEditable(true);
+        // Добавляем KeyListener для обработки клавиши Enter
+        display.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    handleButton("=");
+                }
+            }
+        });
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -55,7 +65,6 @@ public class SmallIntegerGUICalculator extends JFrame {
             JButton button = new JButton(label);
             button.setFont(new Font("Arial", Font.PLAIN, 18));
             buttonPanel.add(button);
-            
             button.addActionListener(e -> handleButton(label));
         }
 
@@ -68,27 +77,45 @@ public class SmallIntegerGUICalculator extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    // Обработка нажатий кнопок с валидацией ввода
     private void handleButton(String label) {
+        if (startNewInput && !label.equals("=")) {
+            display.setText("");
+            startNewInput = false;
+        }
+
+        String currentText = display.getText();
+
         switch (label) {
             case "C":
                 display.setText("");
                 break;
             case "<-":
-                String text = display.getText();
-                if (!text.isEmpty()) {
-                    display.setText(text.substring(0, text.length() - 1));
+                if (!currentText.isEmpty()) {
+                    display.setText(currentText.substring(0, currentText.length() - 1));
                 }
                 break;
             case "=":
                 calculateResult();
                 break;
             default:
-                if (startNewInput) {
-                    display.setText("");
-                    startNewInput = false;
+                // Если вводим оператор, проверяем последний символ
+                if (isOperator(label)) {
+                    if (!currentText.isEmpty() && isOperator(
+                            String.valueOf(currentText.charAt(currentText.length() - 1)))) {
+                        // Заменяем предыдущий оператор на новый
+                        currentText = currentText.substring(0, currentText.length() - 1);
+                        display.setText(currentText + label);
+                        return;
+                    }
                 }
-                display.setText(display.getText() + label);
+                display.setText(currentText + label);
         }
+    }
+
+    // Проверка, является ли строка оператором
+    private boolean isOperator(String s) {
+        return s.equals("+") || s.equals("-") || s.equals("*") || s.equals("/") || s.equals("%");
     }
 
     private void calculateResult() {
@@ -106,7 +133,7 @@ public class SmallIntegerGUICalculator extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                // Устанавливаем Look and Feel системы
+                // Устанавливаем системный Look and Feel
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception e) {
                 e.printStackTrace();
